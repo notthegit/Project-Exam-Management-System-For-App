@@ -1,0 +1,66 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ระบบจัดตารางสอบวิชาโครงงาน</title>
+	<!-- Core CSS - Include with every page -->
+	<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+	<link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+	<div class="wrapper">
+		<div class="container">
+			<h1>Welcome</h1>
+			<h3>ระบบจัดตารางสอบวิชาโครงงาน</h3>
+			<form method="POST" action="{% url 'login' %}" style="margin-top: 10%;">
+				{% csrf_token %}
+				<div class="title">Sign in</div>
+				<div class="fieldWrapper" style="margin-top: 5%;">
+					<input type="text" id="username" name="username"  placeholder="Username">
+				</div>
+				<div class="fieldWrapper">
+					<input type="password" name="password" id="password" placeholder="Password">
+				</div>
+				<button type="submit" id="btn_login" value="login" >LOGIN</button>
+				<input type="hidden" name="next" value="{{ next }}" />
+			</form>
+			<h4 style="color:darkred;text-align: center">{{err_ms}}</h4>
+		</div>
+		
+		<ul class="bg-bubbles">
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+	
+	{% block javascript %} 
+		{% if not user.is_authenticated %}
+		<script>
+			$("ul.nav.navbar-nav.navbar-right").css("display", "none");
+		</script>
+		{% endif %} 
+		<script type="text/javascript" >
+			$(document).ready(function(){
+				$("#username").attr('placeholder', '{{form.username.label}}');
+				$("#password").attr('placeholder', '{{form.password.label}}');
+			});
+		</script>
+
+		
+	{% endblock %}
+</body>
+
+</html>

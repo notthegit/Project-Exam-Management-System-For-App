@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="container" style="text-align: center;margin-top: 3%;"><h1 style="font-size: 6.5em;">เพิ่มโครงงาน</h1></div>
+        <div class="jumbotron">
+            <form action="{% url 'manage_proj' %}" method="post" id="manage_proj">
+                    {% csrf_token %} 
+                <div class="container" style="background-color: whitesmoke;">
+                    <label>ชื่อโครงงานภาษาไทย</label><input type="text" class="form-control" \
+                    name="proj_name_th" id="th" placeholder="เฉพาะตัวอักษรภาษาไทย" required style="font-size: 1.7em">
+                    <label>ชื่อโครงงานภาษาอังกฤษ</label><input type="text" class="form-control" \
+                    name="proj_name_en" id="eng" placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required style="font-size: 1.7em">
+                    <label>ชื่อนักศึกษาคนที่ 1</label>
+                    <div class="container">
+                        <div class='col-md-2'>
+                            <input type="text" class="form-control" \
+                            name="std1_id" id="th" placeholder="รหัสนักศึกษา" required style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-2'>
+                            <select class="form-control" class="select" style="width: 100%;height: 100%;" name="std1_pre_name">
+                                <option selected="selected" disabled hidden style="font-size: 2em">คำนำหน้า</option>
+                                <option value="นาย" style="font-size: 2em">นาย</option>
+                                <option value="นาง" style="font-size: 2em">นาง</option>
+                                <option value="นางสาว" style="font-size: 2em">นางสาว</option>
+                            </select>
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std1_fname" id="th" placeholder="ชื่อ" required style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std1_lname" id="th" placeholder="นามสกุล" required style="font-size: 1.7em">
+                        </div>
+                    </div>
+                    <label>ชื่อนักศึกษาคนที่ 2 (ถ้ามี)</label>
+                    <div class="container">
+                        <div class='col-md-2'>
+                            <input type="text" class="form-control" \
+                            name="std2_id" id="th" placeholder="รหัสนักศึกษา" style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-2'>
+                            <select class="form-control" class="select" style="width: 100%;height: 100%;" name="std2_pre_name">
+                                <option selected="selected" disabled hidden style="font-size: 2em">คำนำหน้า</option>
+                                <option value="นาย" style="font-size: 2em">นาย</option>
+                                <option value="นาง" style="font-size: 2em">นาง</option>
+                                <option value="นางสาว" style="font-size: 2em">นางสาว</option>
+                            </select>
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std2_fname" id="th" placeholder="ชื่อ" style="font-size: 1.7em">
+                        </div>
+                        <div class='col-md-4'>
+                            <input type="text" class="form-control" \
+                            name="std2_lname" id="th" placeholder="นามสกุล" style="font-size: 1.7em">
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class='col-md-6'>
+                            <label>ปีการศึกษา : </label><input type="number" class="form-control" \
+                            name="proj_year" min="0" max="9999" required style="font-size: 1.5em">
+                        </div>
+                        <div class='col-md-6'>
+                            <label>เทอมที่ : </label><br>
+                            <select style="width: 100%;height: 33PX;" name="semester" style="font-size: 1.5em">
+                                <option value="1" selected="selected">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class='col-md-6'>
+                            <label>ชื่อ-นามสกุล อาจารย์ที่ปรึกษา:</label>
+                            <select class="form-control" class="select" style="width: 100%;height: 100%;" name="t_name" required>
+                                <option selected="selected" disabled hidden style="font-size: 2em">รายชื่ออาจารย์</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{teacher.teacher_name}}" style="font-size: 2em">{{teacher.teacher_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- <input type="text" class="form-control" id="teacher" name="t_name" required> -->
+                        </div>
+                        <div class='col-md-6'>
+                            <label>ชื่อ-นาามสกุล อาจารย์ที่ปรึกษา(ร่วม):</label>
+                            <select class="form-control" class="select" style="width: 100%;height: 100%;" name="cot_name">
+                                <option selected="selected" disabled hidden style="font-size: 2em">รายชื่ออาจารย์</option>
+                                {% for teacher in teachers %}
+                                    <option value="{{teacher.teacher_name}}" style="font-size: 2em">{{teacher.teacher_name}}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- <input type="text" class="form-control" id="teacher" name="cot_name" > -->
+                        </div>
+                    </div>
+                    
+                    {% block javascript %} 
+                        <script type="text/javascript">
+                            $(document).ready(function(){
+                                $("#eng").on("keypress", function(event) {
+                                    var englishAlphabetAndWhiteSpace = /[A-Za-z ]/g;
+                                    var key = String.fromCharCode(event.which);
+                                    
+                                    if (event.keyCode == 8 || event.keyCode == 37 || event.keyCode == 39 || englishAlphabetAndWhiteSpace.test(key)) {
+                                        return true;
+                                    }
+                                
+                                    return false;
+                                });
+                                
+                                $('#eng').on("paste",function(e)
+                                {
+                                    e.preventDefault();
+                                });
+
+
+                                $("#th").on("keypress", function(event) {
+                                    var thaiAlphabetAndWhiteSpace = /[ก-๙ ]/g;
+                                    var key = String.fromCharCode(event.which);
+                                    
+                                    if (event.keyCode == 8 || event.keyCode == 37 || event.keyCode == 39 || thaiAlphabetAndWhiteSpace.test(key)) {
+                                        return true;
+                                    }
+                                
+                                    return false;
+                                });
+                                
+                                $('#th').on("paste",function(e)
+                                {
+                                    e.preventDefault();
+                                });
+
+
+                                $("#teacher").on("keypress", function(event) {
+                                    var englishAlphabetAndWhiteSpace = /[A-Za-zก-๙ ]/g;
+                                    var key = String.fromCharCode(event.which);
+                                    
+                                    if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 37 || event.keyCode == 39 || englishAlphabetAndWhiteSpace.test(key)) {
+                                        return true;
+                                    }
+                                
+                                    return false;
+                                });
+                                
+                                $('#teacher').on("paste",function(e)
+                                {
+                                    e.preventDefault();
+                                });
+                            });
+                        </script>
+                    {% endblock %}
+
+                    <div class='col-md-6'>
+                        <label>แขนงวิชา : </label>
+                        <!-- <input type="text" class="form-control" name="major" id="eng" \
+                        placeholder="เฉพาะตัวอักษรภาษาอังกฤษ" required style="font-size: 1.7em"> -->
+                        <select class="form-control" class="select" style="width: 100%;height: 100%;" name="major">
+                            <option selected="selected" disabled hidden style="font-size: 2em">รายการแขนงวิชา</option>
+                            {% for major in majors %}
+                                <option value="{{major.major_name}}" style="font-size: 2em">{{major.major_name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <button name="submit_scoreproj" type="button" class="btn btn-info" data-toggle="modal" data-target="#myModal"><h3>เพิ่มโครงงาน</h3></button>
+        <div class="col-xs-10">
+            
+        </div>
+        <div class="container" style="padding: 5%;">
+
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title" style="font-size: 3em;">ยืนยันการเพิ่มโครงงาน</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h2>ท่านแน่ใจหรือไม่ที่จะเพิ่มโครงงาน.</h2>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="submit_scoreproj" type="submit" class="btn btn-success" form="manage_proj" style="font-size: 1.7em;">ยืนยัน</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
